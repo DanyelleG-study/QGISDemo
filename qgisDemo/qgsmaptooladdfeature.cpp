@@ -1,12 +1,14 @@
 #include "qgsmaptooladdfeature.h"
 #include"qgsmapcanvas.h"
-#include"qgsvectorlayerutils.h"
+#include"qgsattribute.h"
+#include"qgsrubberband.h"
+#include<qdialog.h>
 
 QgsMapToolAddFeature::QgsMapToolAddFeature(QgsMapCanvas *canvas, QgsAdvancedDigitizingDockWidget *cadDockWidget, CaptureMode mode)
-	:QgsMapToolDigitizeFeature(canvas,cadDockWidget,mode)
+	:QgsMapToolDigitizeFeature(canvas, cadDockWidget, mode)
 {
 	setLayer(canvas->currentLayer());
-	mToolName=QStringLiteral("添加要素工具");
+	mToolName = QStringLiteral("添加要素工具");
 }
 
 
@@ -17,14 +19,18 @@ QgsMapToolAddFeature::~QgsMapToolAddFeature()
 bool QgsMapToolAddFeature::addFeature(QgsVectorLayer * vlayer, const QgsFeature & f, bool showModal)
 {
 	QgsFeature feat(f);
-	QgsFields fields = vlayer->fields();
-	QgsAttributeMap initialAttributeValues;
-	QgsExpressionContext context = vlayer->createExpressionContext();
-	QgsFeature newFeature = QgsVectorLayerUtils::createFeature(vlayer, feat.geometry(), initialAttributeValues, &context);
-	for (int index = 0; index < fields.count(); ++index)
+	QgsAttribute *attribute = new QgsAttribute(vlayer, feat);
+	attribute->showAttribute();
+	connect(attribute, &QgsAttribute::addFeatureFinished, this, [=]
 	{
-
-	}
+		QgsRubberBand *rb = takeRubberBand();
+		if (rb)
+		{
+			rb->deleteLater();
+		}
+	});
+	//if (QgsRubberBand *rb = takeRubberBand())
+	//	connect(attribute, &QgsAttribute::addFeatureFinished, rb, &QgsRubberBand::deleteLater);
 	return true;
 }
 

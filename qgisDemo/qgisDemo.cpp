@@ -14,6 +14,7 @@
 #include "qgsmessageviewer.h"
 #include "qgsmessagebaritem.h"
 #include"qgsadvanceddigitizingdockwidget.h"
+#include"qgsmaptooladdfeature.h"
 #include <vector>
 #include <qtoolbar.h>
 #include <qmap.h>
@@ -229,11 +230,12 @@ void qgisDemo::addFeature()
 }
 void qgisDemo::initMapTool()
 {
-	//m_AdvancedDigitizingDockWidget = new QgsAdvancedDigitizingDockWidget(m_MapCanvas, this);
-	//m_AdvancedDigitizingDockWidget->setWindowTitle(QStringLiteral("先进编辑工具"));
-	//m_AdvancedDigitizingDockWidget->setObjectName(QStringLiteral("先进编辑工具"));
-	//m_AddFeature = new QgsMapToolDigitizeFeature(m_MapCanvas, m_AdvancedDigitizingDockWidget);
-	//m_AddFeature->setAction(m_ActionAddFeature);
+	m_AdvancedDigitizingDockWidget = new QgsAdvancedDigitizingDockWidget(m_MapCanvas, this);
+	m_AdvancedDigitizingDockWidget->setWindowTitle(QStringLiteral("先进编辑工具"));
+	m_AdvancedDigitizingDockWidget->setObjectName(QStringLiteral("先进编辑工具"));
+	m_AdvancedDigitizingDockWidget->hide();
+	m_AddFeature = new QgsMapToolAddFeature(m_MapCanvas, m_AdvancedDigitizingDockWidget);
+	m_AddFeature->setAction(m_ActionAddFeature);
 }
 void qgisDemo::toggleEditing()
 {
@@ -372,10 +374,15 @@ QgsMapLayer * qgisDemo::activeLayer()
 }
 qgisDemo::~qgisDemo()
 {
-	if (m_MapCanvas != NULL)
+	//if (m_MapCanvas != NULL)
+	//{
+	//	delete m_MapCanvas;
+	//	m_MapCanvas = NULL;
+	//}
+	if (m_AddFeature != NULL)
 	{
-		delete m_MapCanvas;
-		m_MapCanvas = NULL;
+		delete m_AddFeature;
+		m_AddFeature = NULL;
 	}
 	QgsApplication::exitQgis();//删除提供程序注册表和图层注册表
 }
