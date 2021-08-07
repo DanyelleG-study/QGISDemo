@@ -73,3 +73,6 @@ qgisDemo/x64/Release/qmake/temp/props.txt
 qgisDemo/x64/Release/qmake/temp/qtvars.log
 qgisDemo/x64/Release/qmake/temp/qtvars.pro
 qgisDemo/x64/Release/qmake/temp/qtvars_x64_Release.props
+.vs/qgisDemo/v15/.suo
+.vs/qgisDemo/v15/Browse.VC.db
+.vs/qgisDemo/v15/ipch/AutoPCH/4de220bd94dd24ab/QGISDEMO.ipch
